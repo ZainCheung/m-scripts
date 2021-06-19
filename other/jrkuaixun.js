@@ -19,10 +19,10 @@ https://t.me/wenmou_car
 0 8-14/1 * * * https://raw.githubusercontent.com/ZainCheung/m-scripts/zain/other/jrkuaixun.js, tag=10s阅读, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 [rewrite_local]
 #10s阅读
-.*read_channel\/do_read&pageshow.* url script-request-body https://raw.githubusercontent.com/ZainCheung/m-scripts/zain/other/jrkuaixun.js
+.*read_channel\/do_read&pageshow.* url script-request-header https://raw.githubusercontent.com/ZainCheung/m-scripts/zain/other/jrkuaixun.js
  
 #loon
-.*read_channel\/do_read&pageshow.* script-path=https://raw.githubusercontent.com/ZainCheung/m-scripts/zain/other/jrkuaixun.js, requires-body=true, timeout=10, tag=10s阅读
+http-request .*read_channel\/do_read&pageshow.* script-path=https://raw.githubusercontent.com/ZainCheung/m-scripts/zain/other/jrkuaixun.js, requires-body=true, timeout=10, tag=10s阅读
  
 #surge
  
@@ -34,6 +34,7 @@ hostname = m.lainiwl.top
 */
 const $ = new Env('10s阅读');
 const notify = $.isNode() ? require('./sendNotify') : '';
+const jrpush = $.isNode() ? (process.env.jrpush ? process.env.jrpush : false) :false;
 
 let host = $.getdata('read10surl')?$.getdata('read10surl'):`http://m.lainiwl.top`;
 let cookiesArr = [$.getdata('read10sck')]
@@ -78,6 +79,14 @@ message = ""
         if (message.length != 0) {
          $.msg($.name, "", '10s阅读' + message) 
          }
+        if ($.isNode() && jrpush) {
+            if (message.length != 0) {
+                await notify.sendNotify("10s阅读", `${message}\n\n吹水群：https://t.me/wenmou_car`);
+            }
+        } else {
+            $.msg($.name, "", '10s阅读' + message)
+        }
+ 
     })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
