@@ -38,8 +38,10 @@ const jrpush = $.isNode() ? (process.env.jrpush ? process.env.jrpush : false) :f
 
 let host = $.getdata('read10surl')?$.getdata('read10surl'):`http://m.lainiwl.top`;
 let cookiesArr = [$.getdata('read10sck')]
+let uaArr = [$.getdata('read10sua')]
 if ($.isNode()) {
     cookiesArr = process.env.Readck ? process.env.Readck.split("@") : []
+    uaArr = process.env.Readua ? process.env.Readua.split("@") : []
     host = process.env.readapi ? process.env.readapi : host
 }
 message = ""
@@ -52,6 +54,9 @@ message = ""
                 "open-url": "http://h5.hakc.top/j/r1?upuid=139592&ch=xmy"
             });
             return;
+        }
+        if (!uaArr[0]) {
+            uaArr[0] = "Mozilla/5.0 (Linux; Android 10; HLK-AL00 Build/HONORHLK-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045617 Mobile Safari/537.36 MMWEBID/8785 MicroMessenger/8.0.6.1900(0x28000651) Process/tools WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64";
         }
         console.log(`共${cookiesArr.length}个账号`)
         for (let k = 0; k < cookiesArr.length; k++) {
@@ -67,7 +72,7 @@ message = ""
                         console.log("已达到阅读上限,下个小时再来吧")
                         i = 9999
                     } else {
-                        await read(url)
+                        await read(url,uaArr[k]);
                         await $.wait(1000);
                     }
                 }
@@ -107,18 +112,19 @@ function read10sck() {
     }
 }
 
-function read(url1) {
+function read(url1,ua1) {
     return new Promise(async (resolve) => {
         if (!url1) {
             url = `${host}/read_channel/do_read&pageshow&r=0.8321951810381554`
         } else {
             url = url1
         }
+        ua = (ua1!=null) ? ua1 : "Mozilla/5.0 (Linux; Android 10; HLK-AL00 Build/HONORHLK-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045617 Mobile Safari/537.36 MMWEBID/8785 MicroMessenger/8.0.6.1900(0x28000651) Process/tools WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64";
       let headers = {
             cookie,
             referer:url,
             "X-Requested-With": "XMLHttpRequest",
-            "User-Agent": "Mozilla/5.0 (Linux; Android 10; HLK-AL00 Build/HONORHLK-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045617 Mobile Safari/537.36 MMWEBID/8785 MicroMessenger/8.0.6.1900(0x28000651) Process/tools WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64"
+            "User-Agent": ua
         }
         let options = {
             headers,
