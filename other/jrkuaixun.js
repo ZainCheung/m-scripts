@@ -117,7 +117,8 @@ function read(url1) {
       let headers = {
             cookie,
             referer:url,
-            "X-Requested-With": "XMLHttpRequest"
+            "X-Requested-With": "XMLHttpRequest",
+            "User-Agent": "Mozilla/5.0 (Linux; Android 10; HLK-AL00 Build/HONORHLK-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045617 Mobile Safari/537.36 MMWEBID/8785 MicroMessenger/8.0.6.1900(0x28000651) Process/tools WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64"
         }
         let options = {
             headers,
